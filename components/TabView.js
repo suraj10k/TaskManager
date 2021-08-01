@@ -6,11 +6,14 @@ import SecondScreen from "./Tabs/SecondScreen"
 
 const Tab = createMaterialTopTabNavigator();
 
-function TabView(){
+function TabView(props){
+  console.log(props)
   return (
     <NavigationContainer>
       <Tab.Navigator>
-        <Tab.Screen name="New tasks" component={FirstScreen} />
+      <Tab.Screen name="New tasks">
+      {() => <FirstScreen taskdata={props.taskdata} />}
+      </Tab.Screen>
         <Tab.Screen name="Completed" component={SecondScreen} />
       </Tab.Navigator>
     </NavigationContainer>

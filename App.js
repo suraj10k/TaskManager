@@ -1,12 +1,10 @@
 import React,{useState,useEffect,} from 'react';
-import {Fab,Icon,Box,Center,NativeBaseProvider,AddIcon,Button,Modal,Stack,FormControl,Input,Pressable,Text, HStack, VStack,Avatar} from 'native-base';
+import {StatusBar ,IconButton,Image,SearchIcon ,Fab,Icon,Box,Center,NativeBaseProvider,AddIcon,Button,Modal,Stack,FormControl,Input,Pressable,Text, HStack, VStack,Avatar} from 'native-base';
 import { AntDesign } from "@expo/vector-icons"
 import TopBar from "./components/topBar";
 import axios from 'axios';
 
-
-
-
+import TabView from "./components/TabView"
 
 function App() {
   
@@ -18,7 +16,10 @@ function App() {
   const [people,setPeople] = useState("default value");
   const [description,setDescription] = useState("default value");
   const [isPending,setIsPending] = useState(false)
-  
+  const [reload,setReload] = useState(false)
+
+  const [data,setData] = useState([])
+
   const handleSubmit = () => {
     
     const data = {title,date,startTime,endTime,people,description}
@@ -32,12 +33,53 @@ function App() {
     }).then(() => {
       console.log('Data successfully sent')
       setIsPending(false);
+      setReload(!reload)
     })
   }
   
+const getData = async () => {
+  setIsPending(true);
+  const response = await fetch('https://dermasync.herokuapp.com/api/tasks?completed=0');
+  const json = await response.json();
+  setIsPending(false);
+  console.log(json.data.tasks)
+  setData(json.data.tasks);
+}
+  useEffect(()=>{
+    getData();
+  },[reload])
+  
+  const dat=[{"avatars": "https://s3.amazonaws.com/uifaces/faces/twitter/stefanotirloni/128.jpg,https://s3.amazonaws.com/uifaces/faces/twitter/alevizio/128.jpg,https://s3.amazonaws.com/uifaces/faces/twitter/belyaev_rs/128.jpg", "completed": false, "createdAt": "2021-03-16T19:23:01.949Z", "description": "Wanda Apartment 1071", "id": 1, "title": "Visit Tom", "updatedAt": "2021-03-16T19:23:01.949Z"}];
+  
   return (
     <NativeBaseProvider>
-    <TopBar />
+    <>
+          <StatusBar backgroundColor="#3700B3" barStyle="light-content" />
+  
+          <Box safeAreaTop backgroundColor="#6200ee" />
+  
+          <HStack bg='white' px={1} py={3} justifyContent='space-between' alignItems='center'>
+            <HStack space={4} alignItems='center'>
+              <VStack space={0}>
+                <Text color="grey" fontSize={15} fontWeight='bold'>Hello Steve,</Text>
+                <Text color="black" fontSize={30} fontWeight='bold'>Good Morning</Text>
+              </VStack>
+            </HStack>
+            <HStack space={4}>
+                <Box mt={4}>
+               <SearchIcon size={6} color={"grey"}  />
+               </Box>
+               <Avatar size={"md"}
+            source={{
+                    uri: "https://pbs.twimg.com/profile_images/1369921787568422915/hoyvrUpc_400x400.jpg",
+                    }}
+      >
+        SS
+      </Avatar>
+          </HStack>
+          </HStack>
+          <TabView taskdata={data}/>
+      </>
     <Fab
       position="absolute"
       size="sm"

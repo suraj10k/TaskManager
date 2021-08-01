@@ -2,7 +2,9 @@ import React from "react";
 import { VStack, HStack ,  Button, Icon, Text, NativeBaseProvider, Center, Box, StatusBar ,IconButton,Image,Avatar,SearchIcon } from "native-base";
 import TabView from "./TabView"
 
-function TopBar(){
+function TopBar(props){
+  console.log('hi from topbar')
+  console.log(props)
     return (
       <>
           <StatusBar backgroundColor="#3700B3" barStyle="light-content" />
@@ -29,7 +31,7 @@ function TopBar(){
       </Avatar>
           </HStack>
           </HStack>
-          <TabView />
+          <TabView taskdata={props.taskdata} />
       </>
     )
   }
