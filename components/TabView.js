@@ -14,7 +14,9 @@ function TabView(props){
       <Tab.Screen name="New tasks">
       {() => <FirstScreen taskdata={props.taskdata} />}
       </Tab.Screen>
-        <Tab.Screen name="Completed" component={SecondScreen} />
+        <Tab.Screen name="Completed">
+        {() => <SecondScreen completedData={props.completedData} />}
+        </Tab.Screen>
       </Tab.Navigator>
     </NavigationContainer>
   );

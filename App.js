@@ -5,6 +5,7 @@ import TopBar from "./components/topBar";
 import axios from 'axios';
 
 import TabView from "./components/TabView"
+import { FlatList } from 'react-native';
 
 function App() {
   
@@ -15,10 +16,11 @@ function App() {
   const [endTime,setEndTime] = useState("default value");
   const [people,setPeople] = useState("default value");
   const [description,setDescription] = useState("default value");
-  const [isPending,setIsPending] = useState(false)
-  const [reload,setReload] = useState(false)
+  const [isPending,setIsPending] = useState(false);
+  const [reload,setReload] = useState(false);
 
-  const [data,setData] = useState([])
+  const [data,setData] = useState([]);
+  const [completedData,setCompletedData] = useState([]);
 
   const handleSubmit = () => {
     
@@ -36,6 +38,15 @@ function App() {
       setReload(!reload)
     })
   }
+
+const getCompletedData = async () => {
+  setIsPending(true);
+  const response = await fetch('https://dermasync.herokuapp.com/api/tasks?completed=1');
+  const json = await response.json();
+  setIsPending(false);
+  console.log(json.completedData.tasks)
+  setData(json.completedData.tasks);
+}
   
 const getData = async () => {
   setIsPending(true);
@@ -78,7 +89,7 @@ const getData = async () => {
       </Avatar>
           </HStack>
           </HStack>
-          <TabView taskdata={data}/>
+          <TabView taskdata={data} completedData={completedData}/>
       </>
     <Fab
       position="absolute"
